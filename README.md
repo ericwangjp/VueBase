@@ -1,2 +1,2 @@
 # VueBase
-a vue learning note
+a vue learning note with vue.js
