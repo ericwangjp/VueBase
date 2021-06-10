@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <component-a title="传入组件值" author="{type:1}"></component-a>
+        <component-b v-bind:is-published="publish"></component-b>
+        <!-- 可以使用 v-on 的 .native 修饰符在一个组件的根元素上直接监听一个原生事件 -->
+        <blog-post v-bind:post="post" v-on:focus.native="onFocus"></blog-post>
+        <base-input v-on:focus="onFocus"></base-input>
+    </div>
+
+
+    <script>
+        // 局部注册的组件在其子组件中不可用
+        var ComponentA = {
+            props: {
+                title: String,
+                likes: [String, Number],
+                isPublished: Boolean,
+                commentIds: Array,
+                type: Object,
+                author: {
+                    type: String,
+                    required: true
+                },
+                callback: Function,
+                contactsPromise: Promise // or any other constructor
+            },
+            template: '<h3>局部组件-{{title}}</h3>'
+        }
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                publish: true,
+                post: {
+                    id: 1,
+                    title: "博客标题"
+                }
+            },
+            components: {
+                'component-a': ComponentA,
+                'component-b': {
+                    props: ['isPublished'],
+                    template: '<p>{{isPublished}}</p>'
+                },
+                'blog-post': {
+                    props: ['post'],
+                    template: '<h2>{{post.title}}</h2>'
+                },
+                'base-input': {
+                    inheritAttrs: false,
+                    props: ['label', 'value'],
+                    template: `<label>
+                        {{ label }}
+                        <input
+                            v-bind="$attrs"
+                            v-bind:value="value"
+                            v-on="inputListeners"
+                        >
+                    </label>`,
+                    computed: {
+                        inputListeners: function () {
+                            var vm = this
+                            // `Object.assign` 将所有的对象合并为一个新对象
+                            return Object.assign({},
+                                // 我们从父级添加所有的监听器
+                                this.$listeners,
+                                // 然后我们添加自定义监听器，
+                                // 或覆写一些监听器的行为
+                                {
+                                    // 这里确保组件配合 `v-model` 的工作
+                                    input: function (event) {
+                                        vm.$emit('input', event.target.value)
+                                    }
+                                }
+                            )
+                        }
+                    }
+                }
+            },
+            methods: {
+                onFocus() {
+                    console.log("onFocus")
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>

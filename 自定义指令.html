@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <input type="text" name="" id="ip" v-focus>
+        <div id="hook-arguments-example" v-demo:foo.a.b="message"></div>
+        <p v-pin:[direction]="200">Stick me 200px from the top of the page</p>
+        <div v-aa="{ color: 'white', text: 'hello!' }"></div>
+    </div>
+
+    <script>
+        // 全局注册指令
+        Vue.directive('focus', {
+            inserted: function (el) {
+                el.focus()
+            }
+        })
+        // 局部组件注册指令,组件中也接受一个 directives 的选项
+        // directives: {
+        //     focus: {
+        //         inserted: function (el) {
+        //             el.focus()
+        //         }
+        //     }
+        // }
+
+        Vue.directive('demo', {
+            bind: function (el, binding, vnode) {
+                var s = JSON.stringify
+                el.innerHTML =
+                    'name: ' + s(binding.name) + '<br>' +
+                    'value: ' + s(binding.value) + '<br>' +
+                    'expression: ' + s(binding.expression) + '<br>' +
+                    'argument: ' + s(binding.arg) + '<br>' +
+                    'modifiers: ' + s(binding.modifiers) + '<br>' +
+                    'vnode keys: ' + Object.keys(vnode).join(', ')
+            }
+        })
+
+        // 动态指令
+        Vue.directive('pin', {
+            bind: function (el, binding, vnode) {
+                el.style.position = 'fixed'
+                // el.style.top = binding.value + 'px'
+                var s = (binding.arg == 'left' ? 'left' : 'top')
+                el.style[s] = binding.value + 'px'
+            }
+        })
+
+        Vue.directive('aa', function (el, binding) {
+            console.log(binding.value.color) // => "white"
+            console.log(binding.value.text) // => "hello!"
+        })
+
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                message: 'hello!',
+                direction: 'left'
+            }
+        })
+    </script>
+</body>
+
+</html>

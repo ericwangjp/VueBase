@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .item {
+            color: red
+        }
+    </style>
+    <title>First View</title>
+</head>
+
+<body>
+
+    <div id="app">hello world, {{msg}}
+        <span v-once>数据值只更新一次：{{onceMsg}}</span>
+        <div>{{html}}</div>
+        <div v-html="html"></div>
+        <div v-on:[event]="handleEvent">{{num+1}}</div>
+        <div>
+            <input type="text" v-model="info">
+            <button @click="handleClick">添加</button>
+        </div>
+        <ul>
+            <!-- <li v-for="item in list">{{item}}</li> -->
+            <todo-item v-for="item in list" :item=item :key="item"></todo-item>
+        </ul>
+        <form v-on:submit.prevent="onSubmit">.prevent阻止默认行为</form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        Vue.component(
+            'todo-item', {
+                props: ['item'],
+                template: '<li class="item">{{item}}</li>'
+            }
+        )
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                msg: 'Hello vue',
+                info: '',
+                list: [],
+                onceMsg: "初始值",
+                html: '<span style="color:red">html模板</span>',
+                num: 1,
+                event: 'click'
+
+            },
+            methods: {
+                handleClick() {
+                    this.list.push(this.info)
+                    this.info = ''
+                },
+                handleEvent() {
+                    console.log('你点击我了')
+                }
+            },
+            beforeCreate() {
+                console.log("beforeCreate")
+            },
+            created() {
+                console.log('创建了', this.msg)
+            },
+            beforeMount() {
+                console.log("beforeMount")
+            },
+            mounted() {
+                console.log('mounted')
+            },
+            beforeUpdate() {
+                console.log("beforeUpdate")
+            },
+            updated() {
+                console.log("updated")
+            },
+            beforeDestroy() {
+                console.log("beforeDestroy")
+            },
+            destroyed() {
+                console.log("destroyed")
+            },
+        })
+        vm.$watch('list', function (newVal, oldVal) {
+            vm.onceMsg = "更新"
+        })
+    </script>
+</body>
+
+</html>

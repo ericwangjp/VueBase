@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <button-counter></button-counter>
+        <button-counter></button-counter>
+        <button-counter></button-counter>
+
+        <div :style="{ fontSize: postFontSize + 'em' }">
+            <!-- <blog-post title="博客标题"></blog-post>
+        <blog-post title="哈哈，又来了"></blog-post> -->
+            <blog-post v-for="(item, index) in posts" :key="item.id" :post="item"
+                v-on:enlarge-text="postFontSize += $event"></blog-post>
+        </div>
+
+        <custom-input v-model="searchText"></custom-input>
+        <alert-box>
+            哈哈哈<br>
+            换行试试
+        </alert-box>
+    </div>
+
+
+    <script>
+        // 两种组件的注册类型
+        // 1、全局注册
+        Vue.component('button-counter', {
+            // 一个组件的 data 选项必须是一个函数
+            data() {
+                return {
+                    count: 0
+                }
+            },
+            template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
+        })
+        Vue.component('blog-post', {
+            props: ['post'],
+            template: `
+            <div class="blog-post">
+                <h3>{{ post.title }}</h3>
+                <button @click="$emit('enlarge-text',0.1)">
+                    增大字体
+                </button>
+                <div v-html="post.content"></div>
+            </div>
+            `,
+            methods: {
+
+            },
+        })
+
+        Vue.component('custom-input', {
+            props: ['value'],
+            template: `
+            <input
+                v-bind:value="value"
+                v-on:input="$emit('input', $event.target.value)"
+             >
+            `
+        })
+
+        Vue.component('alert-box', {
+            //  <slot></slot> 占位
+            template: `
+                <div class="demo-alert-box">
+                    <strong>Error!</strong>
+                    <slot></slot>
+                </div>
+                `
+        })
+
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                posts: [{
+                        id: 1,
+                        title: 'My journey with Vue'
+                    },
+                    {
+                        id: 2,
+                        title: 'Blogging with Vue'
+                    },
+                    {
+                        id: 3,
+                        title: 'Why Vue is so fun'
+                    }
+                ],
+                postFontSize: 1,
+                searchText: ''
+            },
+            methods: {
+
+            },
+
+        })
+    </script>
+</body>
+
+</html>

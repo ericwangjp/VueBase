@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+
+<body>
+    <div id="app">{{msg}}
+        <div class="static" v-bind:class="{ active: isActive, 'text-danger': hasError  }">动态绑定class</div>
+        <!-- 绑定的数据对象不必内联定义在模板里 -->
+        <div :class="classObject">引用data中定义对象</div>
+        <div v-bind:class="classObject2">计算属性返回class对象</div>
+        <div v-bind:class="[activeClass, errorClass]">可以把一个数组传给 v-bind:class</div>
+        <div v-bind:class="[isActive ? activeClass : '', errorClass]">三元表达式</div>
+        <div v-bind:class="[{ active: isActive }, errorClass]">等同于上</div>
+        <div v-bind:style="{ color: activeColor, fontSize: fontSize + 'px' }">内联样式</div>
+        <div v-bind:style="styleObject">样式对象绑定</div>
+        <div v-bind:style="[styleObject, overridingStyles]">数组语法将多个样式对象应用到同一个元素上</div>
+        <div :style="{ display: ['-webkit-box', '-ms-flexbox', 'flex'] }">style 绑定中的 property 提供一个包含多个值的数组</div>
+    </div>
+
+
+
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                msg: 'hello vue',
+                isActive: true,
+                hasError: false,
+                classObject: {
+                    active: true,
+                    'text-danger': false
+                },
+                isActive: true,
+                error: null,
+                activeClass: 'active',
+                errorClass: 'text-danger',
+                activeColor: 'red',
+                fontSize: 30,
+                styleObject: {
+                    color: 'green',
+                    fontSize: '16px'
+                },
+                overridingStyles: {
+                    fontWeight: 100,
+                }
+            },
+            computed: {
+                classObject2: function () {
+                    return {
+                        active: this.isActive && !this.error,
+                        'text-danger': this.error && this.error.type === 'fatal'
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

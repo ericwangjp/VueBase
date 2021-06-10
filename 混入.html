@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+
+    </div>
+
+
+    <script>
+        var myMixin = {
+            created() {
+                this.hello()
+            },
+            methods: {
+                hello() {
+                    console.log("hello ,from mix in")
+                }
+            },
+        }
+
+        var Component = Vue.extend({
+            // template:template,
+            mixins: [myMixin]
+        })
+
+        var component = new Component()
+        var vm = new Vue({
+            el: '#app',
+            data: {
+
+            },
+            // components: {
+            //     'my-component': component
+            // }
+        })
+    </script>
+</body>
+
+</html>

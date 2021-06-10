@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <input v-model="message" placeholder="edit me">
+        <p>Message is: {{ message }}</p>
+        <textarea name="tx" id="tv" cols="30" rows="10" v-model="tv" placeholder="请输入"></textarea>
+        <select name="sel" id="se" v-model="sel">
+            <option value="北京">BJ</option>
+            <option value="上海">SH</option>
+            <option value="广州">GZ</option>
+        </select>
+        <input type="checkbox" id="checkbox" v-model="checked">
+        <label for="checkbox">{{ checked }}</label><br>
+
+        <input type="checkbox" id="jack" value="Jack" v-model="checkedNames">
+        <label for="jack">Jack</label>
+        <input type="checkbox" id="john" value="John" v-model="checkedNames">
+        <label for="john">John</label>
+        <input type="checkbox" id="mike" value="Mike" v-model="checkedNames">
+        <label for="mike">Mike</label>
+        <br>
+        <span>Checked names: {{ checkedNames }}</span><br>
+
+        <input type="radio" id="one" value="One" v-model="picked">
+        <label for="one">One</label>
+        <br>
+        <input type="radio" id="two" value="Two" v-model="picked">
+        <label for="two">Two</label>
+        <br>
+        <span>Picked: {{ picked }}</span>
+
+        <select v-model="selected">
+            <option disabled value="">请选择</option>
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+        </select>
+        <span>Selected: {{ selected }}</span>
+
+        <select v-model="SelectedList" multiple style="width: 50px;">
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+        </select>
+        <br>
+        <span>SelectedList: {{ SelectedList }}</span><br>
+
+        <select v-model="selected">
+            <option v-for="option in options" v-bind:value="option.value">
+                {{ option.text }}
+            </option>
+        </select>
+        <span>Selected: {{ selected }}</span><br>
+
+        <!-- 当选中时，`picked` 为字符串 "a" -->
+        <input type="radio" v-model="picked" value="a">
+
+        <!-- `toggle` 为 true 或 false -->
+        <input type="checkbox" v-model="toggle">
+
+        <!-- 当选中第一个选项时，`selected` 为字符串 "abc" -->
+        <select v-model="selected">
+            <option value="abc">ABC</option>
+        </select>
+
+        <select v-model="selected">
+            <!-- 内联对象字面量 -->
+            <option v-bind:value="{ number: 123 }">123</option>
+        </select>
+
+        <br>
+        <!-- 在“change”时而非“input”时更新 -->
+        <input v-model.lazy="message">
+        <p>{{message}}</p>
+
+        <!-- 自动将用户的输入值转为数值类型 -->
+        <input v-model.number="age" type="number">
+        <p>{{age}}</p>
+
+        <!-- 自动过滤用户输入的首尾空白字符 -->
+        <input v-model.trim="message">
+
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                "message": '',
+                tv: '',
+                sel: '',
+                checked: true,
+                checkedNames: [],
+                picked: '',
+                selected: 'A',
+                SelectedList: [],
+                options: [{
+                        text: 'One',
+                        value: 'A'
+                    },
+                    {
+                        text: 'Two',
+                        value: 'B'
+                    },
+                    {
+                        text: 'Three',
+                        value: 'C'
+                    }
+                ],
+                toggle: '',
+                age: 0
+            }
+        })
+    </script>
+</body>
+
+</html>
